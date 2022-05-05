@@ -2,6 +2,8 @@ package jpabook.jpashop.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -16,8 +18,12 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @Column(name = "member_id")  //객체지향스럽지 않다!
-    private Long memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @OneToMany(mappedBy = "order") //mappedBy = 에는 연관관계의 주인이 있는 쪽에서 나(1 쪽)을 참고하는 필드명을 적어준다.
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     //JPA를 직접 쓰면 기본 설정이 orderDate가 그대로 나가지만, 스프링 부트로 JPA를 걸어서 올리면, 스프링 부트 기본설정에 의해서
     // CamelCase를 snake_case로 바꿔주는 설정이 적용되어, 컬럼 이름이 order_date로 create 된다.
@@ -28,6 +34,11 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
+
     public Long getId() {
         return id;
     }
@@ -36,12 +47,12 @@ public class Order {
         this.id = id;
     }
 
-    public Long getMemberId() {
-        return memberId;
+    public Member getMember() {
+        return member;
     }
 
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
+    public void setMember(Member member) {
+        this.member = member;
     }
 
     public LocalDateTime getOrderDate() {
@@ -59,4 +70,5 @@ public class Order {
     public void setStatus(OrderStatus status) {
         this.status = status;
     }
+
 }

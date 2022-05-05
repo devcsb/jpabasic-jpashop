@@ -2,6 +2,7 @@ package jpabook.jpashop;
 
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.Order;
+import jpabook.jpashop.domain.OrderItem;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -18,12 +19,9 @@ public class JpaMain {
         tx.begin();
 
         try {
-//            Member findMember = order.getMember(); // 이렇게 바로 객체를 탐색할 수 있어야 한다!
+            Order order = new Order();
+            order.addOrderItem(new OrderItem());
 
-            Order order = em.find(Order.class, 1L); // 현재 데이터중심 Entity 매핑으로는 이런 식으로 가져올 수 밖에 없음.
-            Long memberId = order.getMemberId();
-
-            Member member = em.find(Member.class, memberId);  //객체지향스럽지 않다!
 
 
             tx.commit();
