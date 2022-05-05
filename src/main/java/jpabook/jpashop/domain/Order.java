@@ -25,6 +25,10 @@ public class Order {
     @OneToMany(mappedBy = "order") //mappedBy = 에는 연관관계의 주인이 있는 쪽에서 나(1 쪽)을 참고하는 필드명을 적어준다.
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "delivery_id")
+    private Delivery delivery;
+
     //JPA를 직접 쓰면 기본 설정이 orderDate가 그대로 나가지만, 스프링 부트로 JPA를 걸어서 올리면, 스프링 부트 기본설정에 의해서
     // CamelCase를 snake_case로 바꿔주는 설정이 적용되어, 컬럼 이름이 order_date로 create 된다.
     //JPA 단독으로 쓸 때는 따로  <property name="hibernate.physical_naming_strategy" value="org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy"/>
